@@ -1,0 +1,107 @@
+### Проект с приложением Polls
+# ГЛАВЫ:
+# 1 - Начало (загрузка библиотек, создание проекта)
+# 2 - Создание приложений (регистрация, urls, создание БД, )
+# 3 - Создание Моделей
+# 4 - Создание миграций после создания классов
+# 5 - Создадим записи в базе данных через Shell
+
+## 1 Начало
+## 1.1 Создаем New Project в IDE
+
+## 1.2 Создаем виртуальную среду, если автоматически не создалась. В cmd:
+python -m venv venv
+
+## 1.3 Загружаем необходимые библиотеки. Как вариант, можно сделать так:
+# создаем файл requirements.txt и в нем пишем:
+django==3.2
+# в cmd:
+pip install -r requirements.txt
+# для проверки в cmd:
+pip list
+
+## 1.4 Создаем проект через django. В cmd (в конце ставим точку):
+django-admin startproject project_name .
+
+
+## 2 - Создание приложений
+## 2.1 Создаем приложение polls. В cmd:
+python manage.py startapp polls
+
+## 2.2 Регистрируем созданное приложение в settings.py из project:
+# Добавляем запись 'polls' в списке INSTALLED_APPS:
+INSTALLED_APPS = [
+    ...
+    'polls',
+    ...
+]
+
+
+## 2.3 в polls создаем файл urls.py, импортируем модуль path и пишем:
+from django.urls import path
+
+urlpatterns = [
+    #path(),            # оставим пока пустой и закомментим
+]
+
+## 2.4 В основной urls.py импортируем модуль include и добавим маршрутизатор к polls.urls:
+from django.urls import path, include
+
+urlpatterns = [
+    ...,
+    path('polls/', include('polls.urls')),
+]
+
+## 2.5 Создаем базы данных SQLite стандартно в настройках не меняя.
+# Если необходима другая СУБД, то надо настраивать в settings.py
+# в cmd:
+
+py manage.py migrate
+
+# за счет этой команды создается структура базы данных, история сохраняется в миграциях
+
+
+## 3 - Создание моделей Question, Choice в polls
+## 3.1 название классов принято в единственном числе писать
+# max_length принимает максимум 255 (вроде?)
+# default
+# null = True - можно ли сделать пустым
+
+
+## 4 - Создание миграций после создания классов
+#cmd:
+py manage.py makemigrations
+#created migration files in the directory 'migrations'
+#cmd:
+py manage.py migrate
+
+
+## 5 - Создадим записи в базе данных через Shell
+##cmd:
+py manage.py shell
+
+# импортируем модели
+from polls.models import Question, Choice
+
+# посмотрим че есть
+Question.objects.all()
+
+from django.utils import timezone
+
+q = Question(question_text="What's new?", pub_date=timezone.now())
+q.save()
+
+# посмотрим че есть
+Question.objects.all()
+q.question_text
+q.pub_date
+
+# можно у вопроса вызвать варианты ответа (название класса в нижнем регистре (back_ref во Flask))
+q.choice_set.all()
+# будет пока пустые варианты ответа >>> <QuerySet []>
+
+q.choice_set.create(choice_text="Good")
+
+q.choice_set.create(choice_text="Cool")
+
+q.choice_set.all()
