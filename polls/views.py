@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models
 
+
+def index(request):
+    return 
 
 def detail(request, question_id):
     return HttpResponse(f"Вы находитесь на вопросе {str(question_id)}")
