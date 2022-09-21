@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models
+from .models import Question, Choice
 
 
 def index(request):
-    return 
+    questions = Question.objects.all()
+    return render(request, 'index.html')
 
 def detail(request, question_id):
     return HttpResponse(f"Вы находитесь на вопросе {str(question_id)}")
