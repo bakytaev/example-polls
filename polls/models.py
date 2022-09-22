@@ -6,7 +6,7 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published')   # админ панель видит как 'date published' (verbose_name)
 
     def __str__(self):
-        return self.question_textq
+        return self.question_text
 
 
 class Choice(models.Model):
